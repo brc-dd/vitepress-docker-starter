@@ -1,0 +1,45 @@
+services:
+  dev:
+    build:
+      context: .
+      target: dev
+    init: true
+    ports:
+      - "127.0.0.1:5173:5173"
+    volumes:
+      - .:/app
+      - node_modules:/app/node_modules
+      - vitepress-cache:/app/docs/.vitepress/cache
+      - pnpm-store:/pnpm/store
+    develop:
+      watch:
+        - action: restart
+          path: package.json
+        - action: restart
+          path: pnpm-lock.yaml
+        - action: restart
+          path: pnpm-workspace.yaml
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:5173/"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 30s
+
+  prod:
+    build:
+      context: .
+      target: prod
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:8080/"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+
+volumes:
+  node_modules:
+  vitepress-cache:
+  pnpm-store:

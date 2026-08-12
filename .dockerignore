@@ -1,0 +1,12 @@
+node_modules
+docs/.vitepress/dist
+docs/.vitepress/cache
+.git
+.github
+.gitignore
+.env*
+**/*.log
+**/.DS_Store
+README.md
+Dockerfile
+compose.yaml
